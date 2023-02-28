@@ -10,5 +10,9 @@ namespace FinanceApp
         MoneyForOneMonth DevideSalary();
         void AddBills(float bills);
         void AddBills(string bills);
+        void AddCasualDay(float casualDay);
+        void AddCasualDay(string casualDay);
+        void AddSavings(float savings);
+        void AddSavings(string savings);
     }
 }
