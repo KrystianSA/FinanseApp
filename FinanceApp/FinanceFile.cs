@@ -1,14 +1,17 @@
-﻿namespace FinanceApp
+﻿
+using System.Runtime.InteropServices;
+
+namespace FinanceApp
 {
-    public class FinanceMemory : FinanceBase
+    public class FinanceFile : FinanceBase
     {
+        private const string fileName = "summary.txt";
         private List<float> salary = new List<float>();
         private List<float> listBills = new List<float>();
         private List<float> listCasualDay = new List<float>();
         private List<float> listSavings = new List<float>();
-        public FinanceMemory(string name, string surname) : base(name, surname)
+        public FinanceFile(string name, string surname) : base(name, surname)
         {
-
         }
         public override void AddSalary(float salary)
         {
@@ -18,13 +21,19 @@
             }
             else
             {
-                Console.WriteLine("wartość przychodu nie może być ujemna");
+                Console.WriteLine("Wpisana kwota musi być dodatnia");
             }
         }
         public override void AddSalary(string salary)
         {
-            float.TryParse(salary, out float salaryInfloat);
-            this.AddSalary(salaryInfloat);
+            if (float.TryParse(salary, out float salaryInfloat1))
+            {
+                this.AddSalary(salaryInfloat1);
+            }
+            else
+            {
+                Console.WriteLine("Podana wartość musi być liczba");
+            }
         }
         public override void AddSalary(int salary)
         {
@@ -84,37 +93,55 @@
             moneyForOneMonth.sumCasualDay = 0;
             moneyForOneMonth.sumSavings = 0;
 
-            foreach (var money in salary)
+            if (File.Exists(fileName))
             {
-                moneyForOneMonth.bills = money * 0.5f;
-                moneyForOneMonth.casualDay = money * 0.3f;
-                moneyForOneMonth.savings = money * 0.2f;
-
-            }
-            foreach (var bill in listBills)
-            {
-                moneyForOneMonth.sumBills += bill;
-                if (moneyForOneMonth.sumBills > moneyForOneMonth.bills)
+                File.WriteAllText(fileName, String.Empty);
+                using (var reader = File.OpenText(fileName))
                 {
-                    Console.WriteLine("$W tym miesiącu przekroczyłeś kwotę założoną na rachunki");
+                    reader.ReadLine();
+                }
+            }
+            using (var writer = File.AppendText(fileName))
+            {
+                foreach (var money in salary)
+                {
+                    writer.WriteLine($"Kwota jaką możesz wydać na ruchunki {moneyForOneMonth.bills = money * 0.5f}");
+                    writer.WriteLine($"Kwota jaką możesz wydać na wydatki codzienne {moneyForOneMonth.casualDay = money * 0.3f}");
+                    writer.WriteLine($"Kwota jaką możesz zaoszczędzić {moneyForOneMonth.savings = money * 0.2f}");
+                }
+            }
+            using (var writer = File.AppendText(fileName))
+            {
+                foreach (var bill in listBills)
+                {
+                    writer.WriteLine($"Suma wydanych pieniędzy na rachunki : {moneyForOneMonth.sumBills += bill}");
+                    if (moneyForOneMonth.sumBills > moneyForOneMonth.bills)
+                    {
+                        writer.WriteLine("W tym miesiącu przekroczyłeś kwotę założoną na rachunki");
+                    }
+                }
+            }
+            using (var writer = File.AppendText(fileName))
+            {
+                foreach (var casualDay in listCasualDay)
+                {
+                    writer.WriteLine($"Suma wydanych pieniędzy na wydatki codzienne : {moneyForOneMonth.sumCasualDay += casualDay}");
+                    if (moneyForOneMonth.sumCasualDay > moneyForOneMonth.casualDay)
+                    {
+                        writer.WriteLine("W tym miesiącu przekroczyłeś kwotę założoną na wydatki codzienne");
+                    }
                 }
             }
 
-            foreach (var casualDay in listCasualDay)
+            using (var writer = File.AppendText(fileName))
             {
-                moneyForOneMonth.sumCasualDay += casualDay;
-                if (moneyForOneMonth.sumCasualDay > moneyForOneMonth.casualDay)
+                foreach (var savings in listSavings)
                 {
-                    Console.WriteLine("$W tym miesiącu przekroczyłeś kwotę założoną na życie codzienne");
-                }
-            }
-
-            foreach (var savings in listSavings)
-            {
-                moneyForOneMonth.sumSavings += savings;
-                if (moneyForOneMonth.sumSavings > moneyForOneMonth.savings)
-                {
-                    Console.WriteLine("O ty Żydzie");
+                    writer.WriteLine($"Suma zaoszczędzonych pieniędzy {moneyForOneMonth.sumSavings += savings}");
+                    if (moneyForOneMonth.sumSavings > moneyForOneMonth.savings)
+                    {
+                        writer.WriteLine("O ty Żydzie");
+                    }
                 }
             }
             return moneyForOneMonth;
