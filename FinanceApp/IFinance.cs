@@ -18,5 +18,7 @@ namespace FinanceApp
         void AddSavings(string savings);
         void AddSavings(int savings);
         MoneyForOneMonth DevideSalary();
+
+        //event AlertAddedDelegate AlertAdded;
     }
 }

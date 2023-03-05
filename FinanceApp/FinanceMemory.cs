@@ -6,6 +6,9 @@
         private List<float> listBills = new List<float>();
         private List<float> listCasualDay = new List<float>();
         private List<float> listSavings = new List<float>();
+
+        public override event AlertAddedDelegate AlertAdded;
+
         public FinanceMemory(string name, string surname) : base(name, surname)
         {
 

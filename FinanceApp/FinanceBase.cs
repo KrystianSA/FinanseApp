@@ -9,6 +9,7 @@
         }
         public string Name { get; private set; }
         public string Surname { get; private set; }
+
         public abstract void AddSalary(float salary);
         public abstract void AddSalary(string salary);
         public abstract void AddSalary(int salary);
@@ -22,5 +23,9 @@
         public abstract void AddSavings(string savings);
         public abstract void AddSavings(int savings);
         public abstract MoneyForOneMonth DevideSalary();
-    }
+
+        public abstract event AlertAddedDelegate AlertAdded;
+
+        public delegate void AlertAddedDelegate(object sender, EventArgs args);
+    } 
 }
