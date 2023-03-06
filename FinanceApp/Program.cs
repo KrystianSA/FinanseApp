@@ -2,32 +2,50 @@
 - wpisywanie użytkownika 
 - obliczanie wydatków na dany miesiąc */
 using FinanceApp;
+using System.Linq.Expressions;
+
 Console.WriteLine("Witaj w aplikacji do zarządzania budżetem domowym");
 Console.WriteLine("================================================");
-/*Console.WriteLine("Wpisz nowego użytkownika");
+/*Console.WriteLine("Podaj swoje dane");
 Console.Write("Imie : ");
 var userName = Console.ReadLine();
 Console.Write("Nazwisko : ");
 var userSurname = Console.ReadLine();
 var user = new User(userName, userSurname);
-Console.WriteLine($"Nowy użytkownik {user.Name} {user.Surname}");*/
+Console.WriteLine($"Dziennik finansowy należący do {user.Name} {user.Surname}");*/
 
 var user = new FinanceFile("Krystian", "Sąsiadek");
 Console.WriteLine("Podaj swój dochód miesięczny. Program rozdzieli twoje wydatki na dany miesiąc.");
+
+user.MoneyAdded += UserMoneyAdded;
+
+void UserMoneyAdded(object sender, EventArgs args)
+{
+    Console.WriteLine("Dochód miesięczny został dodany");
+    Console.WriteLine(" ");
+}
 
 while (true)
 {
     var salary = Console.ReadLine();
     if (salary != null)
     {
-        user.AddSalary(salary);
-        if(float.TryParse(salary, out float salaryInFloat))
+        try
         {
-            if(salaryInFloat> 0)
-            break;
+            user.AddSalary(salary);
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception.Message);
+        }
+        if (float.TryParse(salary, out float salaryInFloat))
+        {
+            if (salaryInFloat > 0)
+                break;
         }
     }
 }
+
 var salary1 = user.DevideSalary();
 
 Console.WriteLine($"Kwota przeznaczona na rachunki {salary1.bills:N2}");
@@ -54,7 +72,14 @@ while (true)
             var bill = Console.ReadLine();
             if (bill != "q")
             {
-                user.AddBills(bill);
+                try
+                {
+                    user.AddBills(bill);
+                }
+                catch(Exception exception) 
+                {
+                    Console.WriteLine(exception.Message);
+                }
                 Console.Write("Dodaj kwote :");
             }
             else if (bill == "q")
@@ -73,7 +98,14 @@ while (true)
             var casualDay = Console.ReadLine();
             if (casualDay != "q")
             {
-                user.AddCasualDay(casualDay);
+                try
+                {
+                    user.AddCasualDay(casualDay);
+                }
+                catch( Exception exception) 
+                {
+                    Console.WriteLine(exception.Message);
+                }
                 Console.Write("Dodaj kwote :");
             }
             else if (casualDay == "q")
@@ -92,7 +124,14 @@ while (true)
             var savings = Console.ReadLine();
             if (savings != "q")
             {
-                user.AddSavings(savings);
+                try
+                {
+                    user.AddSavings(savings);
+                }
+                catch(Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+                }
                 Console.Write("Dodaj kwote :");
             }
             else if (savings == "q")
@@ -107,12 +146,14 @@ while (true)
         Console.WriteLine("Zamknąłeś dziennik.");
         break;
     }
+    else
+    {
+        Console.WriteLine("Wybierz grupę lub wyjdź");
+    }
 }
 var salary2 = user.DevideSalary();
 
-Console.WriteLine($"rachunki {salary2.sumBills}");
-Console.WriteLine($"życie {salary2.sumCasualDay}");
-Console.WriteLine($"oszczędności {salary2.sumSavings}");
-
-
-
+Console.WriteLine(" ");
+Console.WriteLine($"Rachunki wyniosły {salary2.sumBills}");
+Console.WriteLine($"Kwota na wydatki codzienne wyniosła  {salary2.sumCasualDay}");
+Console.WriteLine($"Ilość zaoszczędzonych pieniędzy to  {salary2.sumSavings}");

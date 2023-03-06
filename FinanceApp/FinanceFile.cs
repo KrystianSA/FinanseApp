@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 
 namespace FinanceApp
@@ -11,8 +12,9 @@ namespace FinanceApp
         private List<float> listCasualDay = new List<float>();
         private List<float> listSavings = new List<float>();
 
-        public override event AlertAddedDelegate AlertAdded;
+        public delegate void MoneyAddedDelegate(object sender, EventArgs args);
 
+        public event MoneyAddedDelegate MoneyAdded;
         public FinanceFile(string name, string surname) : base(name, surname)
         {
         }
@@ -21,10 +23,14 @@ namespace FinanceApp
             if (salary > 0)
             {
                 this.salary.Add(salary);
+                if (MoneyAdded != null)
+                {
+                    MoneyAdded(this, new EventArgs());
+                }
             }
             else
             {
-                Console.WriteLine("Wpisana kwota musi być dodatnia");
+                throw new Exception("Wpisana kwota musi być dodatnia");
             }
         }
         public override void AddSalary(string salary)
@@ -35,7 +41,7 @@ namespace FinanceApp
             }
             else
             {
-                Console.WriteLine("Podana wartość musi być liczba");
+                throw new Exception("Podana wartość musi być liczba");
             }
         }
         public override void AddSalary(int salary)
@@ -45,12 +51,25 @@ namespace FinanceApp
         }
         public override void AddBills(float bills)
         {
-            this.listBills.Add(bills);
+            if (bills > 0)
+            {
+                this.listBills.Add(bills);
+            }
+            else
+            {
+                throw new Exception("Wpisana kwota musi być dodatnia");
+            }
         }
         public override void AddBills(string bills)
         {
-            float.TryParse(bills, out float billsInfloat);
-            this.AddBills(billsInfloat);
+            if (float.TryParse(bills, out float billsInfloat))
+            {
+                this.AddBills(billsInfloat);
+            }
+            else
+            {
+                throw new Exception("Podana wartość musi być liczba");
+            }
         }
         public override void AddBills(int bills)
         {
@@ -60,12 +79,25 @@ namespace FinanceApp
 
         public override void AddCasualDay(float casualDay)
         {
-            this.listCasualDay.Add(casualDay);
+            if (casualDay > 0)
+            {
+                this.listCasualDay.Add(casualDay);
+            }
+            else
+            {
+                throw new Exception("Wpisana kwota musi być dodatnia");
+            }
         }
         public override void AddCasualDay(string casualDay)
         {
-            float.TryParse(casualDay, out float casualDayInFloat);
-            this.AddCasualDay(casualDayInFloat);
+            if (float.TryParse(casualDay, out float casualDayInFloat))
+            {
+                this.AddCasualDay(casualDayInFloat);
+            }
+            else
+            {
+                throw new Exception("Podana wartość musi być liczba");
+            }
         }
         public override void AddCasualDay(int casualDay)
         {
@@ -74,12 +106,25 @@ namespace FinanceApp
         }
         public override void AddSavings(float savings)
         {
-            this.listSavings.Add(savings);
+            if (savings > 0)
+            {
+                this.listSavings.Add(savings);
+            }
+            else
+            {
+                throw new Exception("Wpisana kwota musi być dodatnia");
+            }
         }
         public override void AddSavings(string savings)
         {
-            float.TryParse(savings, out float savingsInFloat);
-            this.AddSavings(savingsInFloat);
+            if (float.TryParse(savings, out float savingsInFloat))
+            {
+                this.AddSavings(savingsInFloat);
+            }
+            else
+            {
+                throw new Exception("Podana wartość musi być liczba");
+            }
         }
         public override void AddSavings(int savings)
         {
@@ -89,12 +134,6 @@ namespace FinanceApp
         public override MoneyForOneMonth DevideSalary()
         {
             var moneyForOneMonth = new MoneyForOneMonth();
-            moneyForOneMonth.bills = 0;
-            moneyForOneMonth.casualDay = 0;
-            moneyForOneMonth.savings = 0;
-            moneyForOneMonth.sumBills = 0;
-            moneyForOneMonth.sumCasualDay = 0;
-            moneyForOneMonth.sumSavings = 0;
 
             if (File.Exists(fileName))
             {
@@ -108,9 +147,7 @@ namespace FinanceApp
             {
                 foreach (var money in salary)
                 {
-                    moneyForOneMonth.bills = money * 0.5f;
-                    moneyForOneMonth.casualDay = money * 0.3f;
-                    moneyForOneMonth.savings = money * 0.2f;
+                    moneyForOneMonth.DevideSalary(money);
                     writer.WriteLine($"Kwota jaką możesz wydać na ruchunki {moneyForOneMonth.bills:N2}");
                     writer.WriteLine($"Kwota jaką możesz wydać na wydatki codzienne {moneyForOneMonth.casualDay:N2}");
                     writer.WriteLine($"Kwota jaką możesz zaoszczędzić {moneyForOneMonth.savings:N2}");
@@ -121,53 +158,32 @@ namespace FinanceApp
             {
                 foreach (var bill in listBills)
                 {
-                    moneyForOneMonth.sumBills += bill;
-                    if(moneyForOneMonth.sumBills > bill)
-                    {
-                        writer.WriteLine($"Rachunnki w tym miesiącu wyniosły: {moneyForOneMonth.sumBills}");
-                        break;
-                    }
-                    else if (moneyForOneMonth.sumBills > moneyForOneMonth.bills)
-                    {
-                        writer.Write($"Rachunnki w tym miesiącu wyniosły: {moneyForOneMonth.sumBills}");
-                        writer.WriteLine(" ===> W tym miesiącu przekroczyłeś kwotę założoną na rachunki");
-                    }
+                    moneyForOneMonth.AddBills(bill);
+                    writer.WriteLine($"W tym miesiącu przekroczyłeś kwotę założoną na rachunki");
+                    writer.Write($"Rachunki wyniosły: {moneyForOneMonth.sumBills}");
+                    writer.WriteLine($" ===> Przekroczyłeś kwotę założoną na rachunki o {moneyForOneMonth.sumBills - moneyForOneMonth.bills}");
                 }
             }
             using (var writer = File.AppendText(fileName))
             {
                 foreach (var casualDay in listCasualDay)
                 {
-                    moneyForOneMonth.sumCasualDay+= casualDay;
-                    if (moneyForOneMonth.sumCasualDay > casualDay)
-                    {
-                        writer.WriteLine($"Wydatki codzienne w tym miesiącu wyniosły : {moneyForOneMonth.sumCasualDay}");
-                        break;
-                    }
-                    else if (moneyForOneMonth.sumCasualDay > moneyForOneMonth.casualDay)
-                    {
-                        writer.Write($"Wydatki codzienne w tym miesiącu wyniosły : {moneyForOneMonth.sumCasualDay}");
-                        writer.WriteLine(" ===> W tym miesiącu przekroczyłeś kwotę założoną na wydatki codzienne");
-                    }
+                    moneyForOneMonth.AddCasualDay(casualDay);
+                    writer.WriteLine($"W tym miesiącu przekroczyłeś kwotę założoną na życie codzienne");
+                    writer.Write($"Koszty wydatków codziennych wyniosły: {moneyForOneMonth.sumCasualDay}");
+                    writer.WriteLine($"===> Przekroczyłeś kwotę założoną na wydatki codzienne o {moneyForOneMonth.sumCasualDay - moneyForOneMonth.casualDay}");
                 }
             }
 
-            using (var writer = File.AppendText(fileName))
+           /* using (var writer = File.AppendText(fileName))
             {
                 foreach (var savings in listSavings)
                 {
-                    moneyForOneMonth.sumSavings+= savings;
-                    if (moneyForOneMonth.sumSavings > savings)
-                    {
-                        writer.WriteLine($"Suma zaoszczędzonych pieniędzy {moneyForOneMonth.sumSavings}");
-                    }                  
-                    else if (moneyForOneMonth.sumSavings > moneyForOneMonth.savings)
-                    {
-                        writer.Write($"Suma zaoszczędzonych pieniędzy {moneyForOneMonth.sumSavings}");
-                        writer.WriteLine(" ===> O ty Żydzie");
-                    }
+                    moneyForOneMonth.AddSavings(savings);
                 }
-            }
+                writer.WriteLine("O ty Żydzie");
+                writer.WriteLine($"Zaosczędziłeś tyle siana ! OOOOO tyle : {moneyForOneMonth.sumSavings}");
+            }*/
             return moneyForOneMonth;
         }
     }

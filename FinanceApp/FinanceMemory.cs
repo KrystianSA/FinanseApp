@@ -7,7 +7,8 @@
         private List<float> listCasualDay = new List<float>();
         private List<float> listSavings = new List<float>();
 
-        public override event AlertAddedDelegate AlertAdded;
+        public delegate void MoneyAddedDelegate(object sender, EventArgs args);
+        public event MoneyAddedDelegate MoneyAdded;
 
         public FinanceMemory(string name, string surname) : base(name, surname)
         {
@@ -18,16 +19,26 @@
             if (salary > 0)
             {
                 this.salary.Add(salary);
+                if (MoneyAdded != null)
+                {
+                    MoneyAdded(this, new EventArgs());
+                }
             }
             else
             {
-                Console.WriteLine("wartość przychodu nie może być ujemna");
+                throw new Exception("Wpisana kwota musi być dodatnia");
             }
         }
         public override void AddSalary(string salary)
         {
-            float.TryParse(salary, out float salaryInfloat);
-            this.AddSalary(salaryInfloat);
+            if (float.TryParse(salary, out float salaryInfloat1))
+            {
+                this.AddSalary(salaryInfloat1);
+            }
+            else
+            {
+                throw new Exception("Podana wartość musi być liczba");
+            }
         }
         public override void AddSalary(int salary)
         {
@@ -36,12 +47,25 @@
         }
         public override void AddBills(float bills)
         {
-            this.listBills.Add(bills);
+            if (bills > 0)
+            {
+                this.listBills.Add(bills);
+            }
+            else
+            {
+                throw new Exception("Wpisana kwota musi być dodatnia");
+            }
         }
         public override void AddBills(string bills)
         {
-            float.TryParse(bills, out float billsInfloat);
-            this.AddBills(billsInfloat);
+            if (float.TryParse(bills, out float billsInfloat))
+            {
+                this.AddBills(billsInfloat);
+            }
+            else
+            {
+                throw new Exception("Podana wartość musi być liczba");
+            }
         }
         public override void AddBills(int bills)
         {
@@ -51,12 +75,25 @@
 
         public override void AddCasualDay(float casualDay)
         {
-            this.listCasualDay.Add(casualDay);
+            if (casualDay > 0)
+            {
+                this.listCasualDay.Add(casualDay);
+            }
+            else
+            {
+                throw new Exception("Wpisana kwota musi być dodatnia");
+            }
         }
         public override void AddCasualDay(string casualDay)
         {
-            float.TryParse(casualDay, out float casualDayInFloat);
-            this.AddCasualDay(casualDayInFloat);
+            if (float.TryParse(casualDay, out float casualDayInFloat))
+            {
+                this.AddCasualDay(casualDayInFloat);
+            }
+            else
+            {
+                throw new Exception("Podana wartość musi być liczba");
+            }
         }
         public override void AddCasualDay(int casualDay)
         {
@@ -65,12 +102,25 @@
         }
         public override void AddSavings(float savings)
         {
-            this.listSavings.Add(savings);
+            if (savings > 0)
+            {
+                this.listSavings.Add(savings);
+            }
+            else
+            {
+                throw new Exception("Wpisana kwota musi być dodatnia");
+            }
         }
         public override void AddSavings(string savings)
         {
-            float.TryParse(savings, out float savingsInFloat);
-            this.AddSavings(savingsInFloat);
+            if (float.TryParse(savings, out float savingsInFloat))
+            {
+                this.AddSavings(savingsInFloat);
+            }
+            else
+            {
+                throw new Exception("Podana wartość musi być liczba");
+            }
         }
         public override void AddSavings(int savings)
         {
@@ -80,46 +130,25 @@
         public override MoneyForOneMonth DevideSalary()
         {
             var moneyForOneMonth = new MoneyForOneMonth();
-            moneyForOneMonth.bills = 0;
-            moneyForOneMonth.casualDay = 0;
-            moneyForOneMonth.savings = 0;
-            moneyForOneMonth.sumBills = 0;
-            moneyForOneMonth.sumCasualDay = 0;
-            moneyForOneMonth.sumSavings = 0;
 
             foreach (var money in salary)
             {
-                moneyForOneMonth.bills = money * 0.5f;
-                moneyForOneMonth.casualDay = money * 0.3f;
-                moneyForOneMonth.savings = money * 0.2f;
-
+                moneyForOneMonth.DevideSalary(money);
             }
             foreach (var bill in listBills)
             {
-                moneyForOneMonth.sumBills += bill;
-                if (moneyForOneMonth.sumBills > moneyForOneMonth.bills)
-                {
-                    Console.WriteLine("$W tym miesiącu przekroczyłeś kwotę założoną na rachunki");
-                }
+               moneyForOneMonth.AddBills(bill);
             }
 
             foreach (var casualDay in listCasualDay)
             {
-                moneyForOneMonth.sumCasualDay += casualDay;
-                if (moneyForOneMonth.sumCasualDay > moneyForOneMonth.casualDay)
-                {
-                    Console.WriteLine("$W tym miesiącu przekroczyłeś kwotę założoną na życie codzienne");
-                }
+                moneyForOneMonth.AddCasualDay(casualDay);
             }
-
+            /*
             foreach (var savings in listSavings)
             {
-                moneyForOneMonth.sumSavings += savings;
-                if (moneyForOneMonth.sumSavings > moneyForOneMonth.savings)
-                {
-                    Console.WriteLine("O ty Żydzie");
-                }
-            }
+                moneyForOneMonth.AddSavings(savings);
+            }*/
             return moneyForOneMonth;
         }
     }
