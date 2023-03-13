@@ -1,4 +1,5 @@
-﻿namespace FinanceApp
+﻿using FinanceApp;
+namespace FinanceApp
 {
     public class MoneyForOneMonth
     {

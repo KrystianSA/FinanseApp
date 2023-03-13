@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.Metrics;
-
+using FinanceApp;
 namespace FinanceApp
 {
     public class FinanceMemory : FinanceBase

@@ -3,7 +3,7 @@
 - obliczanie wydatków na dany miesiąc */
 using FinanceApp;
 using System.Linq.Expressions;
-/*
+
 Console.WriteLine("Witaj w aplikacji do zarządzania budżetem domowym");
 Console.WriteLine("================================================");
 Console.WriteLine("Podaj swoje dane");
@@ -11,10 +11,8 @@ Console.Write("Imie : ");
 var userName = Console.ReadLine();
 Console.Write("Nazwisko : ");
 var userSurname = Console.ReadLine();
-var user = new User(userName, userSurname);
-Console.WriteLine($"Dziennik finansowy należący do {user.Name} {user.Surname}");*/
+var user = new FinanceFile(userName, userSurname);
 
-var user = new FinanceFile("Krystian", "Sąsiadek");
 Console.WriteLine("Podaj swój dochód miesięczny. Program rozdzieli twoje wydatki na dany miesiąc.");
 
 user.MoneyAdded += UserMoneyAdded;
@@ -48,6 +46,8 @@ while (true)
 
 var salary1 = user.DevideSalary();
 
+Console.WriteLine($"Dziennik finansowy należący do {user.Name} {user.Surname}");
+Console.WriteLine(" ");
 Console.WriteLine($"Kwota przeznaczona na rachunki {salary1.bills:N2}");
 Console.WriteLine($"Kwota przeznaczona na wydatki codzienne {salary1.casualDay:N2}");
 Console.WriteLine($"Kwota do zaoszczędzenia {salary1.savings:N2}");

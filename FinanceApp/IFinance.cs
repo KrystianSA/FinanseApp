@@ -1,4 +1,5 @@
 ﻿using FinanceApp;
+
 namespace FinanceApp
 {
     public interface IFinance

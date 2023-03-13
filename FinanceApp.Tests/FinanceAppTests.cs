@@ -1,5 +1,6 @@
 using System.Reflection.Metadata;
 using FinanceApp;
+
 namespace FinanceApp.Tests
 {
     public class FinanceAppTests

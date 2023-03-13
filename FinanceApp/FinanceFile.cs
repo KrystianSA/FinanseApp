@@ -1,4 +1,4 @@
-﻿
+﻿using FinanceApp;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 
