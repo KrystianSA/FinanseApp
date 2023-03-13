@@ -9,7 +9,7 @@
         public float sumCasualDay { get; set; }
         public float sumSavings { get; set; }
 
-        public MoneyForOneMonth() 
+        public MoneyForOneMonth()
         {
             this.bills = 0;
             this.casualDay = 0;
@@ -28,42 +28,15 @@
         public void AddBills(float bill)
         {
             this.sumBills += bill;
-            if (this.sumBills > bill)
-            {
-                Console.WriteLine("W tym miesiącu przekroczyłeś kwotę założoną na rachunki");
-                Console.Write($"Rachunki wyniosły: {this.sumBills}");
-                Console.WriteLine($" ===> Przekroczyłeś kwotę założoną na rachunki o {this.sumBills-this.bills}");
-                if (this.sumBills > this.bills)
-                {
-                    Console.WriteLine("W tym miesiącu przekroczyłeś kwotę założoną na rachunki");
-                    Console.Write($"Rachunki wyniosły: {this.sumBills}");
-                    Console.WriteLine($" ===> Przekroczyłeś kwotę założoną na rachunki o {this.sumBills - this.bills}");
-                }
-            }
         }
-        public void AddCasualDay(float casualDay) 
+
+        public void AddCasualDay(float casualDay)
         {
             this.sumCasualDay += casualDay;
-            if (this.sumCasualDay > casualDay)
-            {
-                Console.WriteLine("W tym miesiącu przekroczyłeś kwotę założoną na życie codzienne");
-                Console.Write($"Koszty wydatków codziennych wyniosły: {this.sumCasualDay}");
-                if (this.sumCasualDay > this.casualDay)
-                {
-                    Console.WriteLine($" ===> Przekroczyłeś kwotę założoną na wydatki codzienne o {this.sumCasualDay - this.casualDay}");
-                    Console.WriteLine("W tym miesiącu przekroczyłeś kwotę założoną na życie codzienne");
-                    Console.Write($"Koszty wydatków codziennych wyniosły: {this.sumCasualDay}");
-                }
-            }
-        }/*
-        public void AddSavings(float savings) 
+        }
+        public void AddSavings(float savings)
         {
             this.sumSavings += savings;
-            if (this.sumSavings > savings)
-            {
-                Console.WriteLine("O ty Żydzie");
-                Console.WriteLine($"Zaosczędziłeś tyle siana ! OOOOO tyle : {this.sumSavings}");
-            }
-        }*/
+        }
     }
 }

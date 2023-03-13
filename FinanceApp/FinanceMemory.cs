@@ -1,4 +1,6 @@
-﻿namespace FinanceApp
+﻿using System.Diagnostics.Metrics;
+
+namespace FinanceApp
 {
     public class FinanceMemory : FinanceBase
     {
@@ -134,21 +136,23 @@
             foreach (var money in salary)
             {
                 moneyForOneMonth.DevideSalary(money);
+                break;
             }
             foreach (var bill in listBills)
             {
-               moneyForOneMonth.AddBills(bill);
+                moneyForOneMonth.AddBills(bill);
             }
-
             foreach (var casualDay in listCasualDay)
             {
                 moneyForOneMonth.AddCasualDay(casualDay);
+                break;
             }
-            /*
+
             foreach (var savings in listSavings)
             {
                 moneyForOneMonth.AddSavings(savings);
-            }*/
+                break;
+            }
             return moneyForOneMonth;
         }
     }

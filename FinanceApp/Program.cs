@@ -3,10 +3,10 @@
 - obliczanie wydatków na dany miesiąc */
 using FinanceApp;
 using System.Linq.Expressions;
-
+/*
 Console.WriteLine("Witaj w aplikacji do zarządzania budżetem domowym");
 Console.WriteLine("================================================");
-/*Console.WriteLine("Podaj swoje dane");
+Console.WriteLine("Podaj swoje dane");
 Console.Write("Imie : ");
 var userName = Console.ReadLine();
 Console.Write("Nazwisko : ");
@@ -155,5 +155,21 @@ var salary2 = user.DevideSalary();
 
 Console.WriteLine(" ");
 Console.WriteLine($"Rachunki wyniosły {salary2.sumBills}");
+if (salary2.sumBills > salary1.bills)
+{
+    Console.WriteLine($" ===> Przekroczono kwotę przeznaczoną na rachunki o {salary2.sumBills - salary1.bills}");
+}
+
 Console.WriteLine($"Kwota na wydatki codzienne wyniosła  {salary2.sumCasualDay}");
+if (salary2.sumCasualDay > salary1.casualDay)
+{
+    Console.WriteLine($" ===> Przekroczono kwotę przeznaczoną na wydatki codzienne o {salary2.sumCasualDay-salary1.casualDay}");
+}
+
 Console.WriteLine($"Ilość zaoszczędzonych pieniędzy to  {salary2.sumSavings}");
+if (salary2.sumSavings > salary1.savings)
+{
+    Console.WriteLine($"Odłożono więcej niż zakładano. Good JOB !");
+}
+
+

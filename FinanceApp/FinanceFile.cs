@@ -159,31 +159,32 @@ namespace FinanceApp
                 foreach (var bill in listBills)
                 {
                     moneyForOneMonth.AddBills(bill);
-                    writer.WriteLine($"W tym miesiącu przekroczyłeś kwotę założoną na rachunki");
-                    writer.Write($"Rachunki wyniosły: {moneyForOneMonth.sumBills}");
-                    writer.WriteLine($" ===> Przekroczyłeś kwotę założoną na rachunki o {moneyForOneMonth.sumBills - moneyForOneMonth.bills}");
                 }
+                writer.WriteLine($"W tym miesiącu przekroczyłeś kwotę założoną na rachunki");
+                writer.Write($"Rachunki wyniosły: {moneyForOneMonth.sumBills}");
+                writer.WriteLine($" ===> Przekroczyłeś kwotę założoną na rachunki o {moneyForOneMonth.sumBills - moneyForOneMonth.bills}");
             }
             using (var writer = File.AppendText(fileName))
             {
                 foreach (var casualDay in listCasualDay)
                 {
                     moneyForOneMonth.AddCasualDay(casualDay);
-                    writer.WriteLine($"W tym miesiącu przekroczyłeś kwotę założoną na życie codzienne");
-                    writer.Write($"Koszty wydatków codziennych wyniosły: {moneyForOneMonth.sumCasualDay}");
-                    writer.WriteLine($"===> Przekroczyłeś kwotę założoną na wydatki codzienne o {moneyForOneMonth.sumCasualDay - moneyForOneMonth.casualDay}");
                 }
+                writer.WriteLine(" ");
+                writer.WriteLine($"W tym miesiącu przekroczyłeś kwotę założoną na życie codzienne");
+                writer.Write($"Koszty wydatków codziennych wyniosły: {moneyForOneMonth.sumCasualDay}");
+                writer.WriteLine($"===> Przekroczyłeś kwotę założoną na wydatki codzienne o {moneyForOneMonth.sumCasualDay - moneyForOneMonth.casualDay}");
             }
 
-           /* using (var writer = File.AppendText(fileName))
+            using (var writer = File.AppendText(fileName))
             {
                 foreach (var savings in listSavings)
                 {
                     moneyForOneMonth.AddSavings(savings);
                 }
-                writer.WriteLine("O ty Żydzie");
-                writer.WriteLine($"Zaosczędziłeś tyle siana ! OOOOO tyle : {moneyForOneMonth.sumSavings}");
-            }*/
+                writer.WriteLine(" ");
+                writer.WriteLine("Odłożono więcej niż zakładano. Good JOB !");
+            }
             return moneyForOneMonth;
         }
     }
